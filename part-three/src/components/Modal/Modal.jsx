@@ -21,7 +21,7 @@ export default class Modal extends React.Component {
 		}
 		return (
 			<ModalBackground>
-				<ModalContainer id="modal">
+				<ModalContainer>
 					<Title>User</Title>
 					<Content>{this.props.children}</Content>
 					<ButtonContainer>
