@@ -37,14 +37,17 @@ class EditableProfile extends React.Component {
 		);
 	};
 
-	onSubmit = () => {
-		const { first_name, last_name } = this.props.updates;
-		this.props.onSave({
-			firstName: first_name,
-			lastName: last_name,
-			userId: this.props.user.id,
-			updatedAt: new Date().toISOString(),
-		});
+	onSubmit = (e) => {
+		e.preventDefault();
+		if (this.hasChanges() && this.props.currentPage === STEPS.LAST_NAME) {
+			const { first_name, last_name } = this.props.updates;
+			this.props.onSave({
+				firstName: first_name,
+				lastName: last_name,
+				userId: this.props.user.id,
+				updatedAt: new Date().toISOString(),
+			});
+		}
 	};
 
 	render() {
@@ -61,23 +64,22 @@ class EditableProfile extends React.Component {
 								onClick={this.props.handleNavigate}
 								text={this.props.currentPage === STEPS.FIRST_NAME ? 'Go next' : 'Go prev'}
 							/>
-							<InputContainer id={UPDATE_USER_FORM}>
+							<InputContainer onSubmit={this.onSubmit} id={UPDATE_USER_FORM}>
 								<NameInput
 									type="text"
 									value={this.props.updates[this.props.currentPage]}
 									id={this.props.currentPage}
 									onChange={this.handleChange}
 								/>
+								{this.props.currentPage === STEPS.LAST_NAME && (
+									<Button
+										type="submit"
+										form={UPDATE_USER_FORM}
+										disabled={!this.hasChanges()}
+										text="Submit"
+									/>
+								)}
 							</InputContainer>
-							{this.props.currentPage === STEPS.LAST_NAME && (
-								<Button
-									type="submit"
-									form={UPDATE_USER_FORM}
-									onClick={this.onSubmit}
-									disabled={!this.hasChanges()}
-									text="Submit"
-								/>
-							)}
 						</FormContainer>
 					</Fragment>
 				)}

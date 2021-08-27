@@ -34,34 +34,34 @@ class EditableProfile extends React.Component {
 		const { first_name, last_name } = this.props.user;
 
 		const { firstName: changedFirstName, lastName: changedLastName } = this.state;
-		return first_name !== changedFirstName || last_name !== changedLastName;
+		return (
+			changedFirstName && changedLastName && (first_name !== changedFirstName || last_name !== changedLastName)
+		);
 	};
 
-	onSubmit = () => {
-		const { firstName, lastName } = this.state;
-		this.props.onSave({
-			firstName,
-			lastName,
-			userId: this.props.user.id,
-			updatedAt: new Date().toISOString(),
-		});
+	onSubmit = (e) => {
+		e.preventDefault();
+		if (this.hasChanges()) {
+			const { firstName, lastName } = this.state;
+			this.props.onSave({
+				firstName,
+				lastName,
+				userId: this.props.user.id,
+				updatedAt: new Date().toISOString(),
+			});
+		}
 	};
+
 	render() {
 		const { user } = this.props;
 		return (
 			<Container>
 				<Avatar src={user.avatar} alt={user.last_name} />
-				<InputContainer id={UPDATE_USER_FORM}>
+				<InputContainer onSubmit={this.onSubmit} id={UPDATE_USER_FORM}>
 					<NameInput type="text" value={this.state.firstName} id="firstName" onChange={this.handleChange} />
 					<NameInput type="text" value={this.state.lastName} id="lastName" onChange={this.handleChange} />
+					<Button type="submit" form={UPDATE_USER_FORM} disabled={!this.hasChanges()} text="Submit" />
 				</InputContainer>
-				<Button
-					type="submit"
-					form={UPDATE_USER_FORM}
-					onClick={this.onSubmit}
-					disabled={!this.hasChanges()}
-					text="Submit"
-				/>
 			</Container>
 		);
 	}

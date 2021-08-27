@@ -20,6 +20,7 @@ export const InputContainer = styled.form`
 	padding: 0 15px;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 `;
 
 export const FormContainer = styled.div`
